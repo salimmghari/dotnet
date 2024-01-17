@@ -1,0 +1,190 @@
+﻿@page "/"
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+@inject ILogger<Auth> Logger
+
+<Layout>
+    <Title>
+        Notes
+    </Title>
+    @foreach(Note NoteObject in Notes ?? [])
+    {
+        <NoteComponent
+            Title="@NoteObject.Title"
+            Body="@NoteObject.Body"
+            TitleChange="@((ChangeEventArgs Event) => NoteObject.Title = Event?.Value?.ToString())"
+            BodyChange="@((ChangeEventArgs Event) => NoteObject.Body = Event?.Value?.ToString())"
+            Create="@((MouseEventArgs Event) => {})"
+            Update="@((MouseEventArgs Event) => PutNote(NoteObject.Id, NoteObject))"
+            Delete="@((MouseEventArgs Event) => DeleteNote(NoteObject.Id))" 
+        />
+    }
+    <NoteComponent 
+        Title="@NewNote.Title"
+        Body="@NewNote.Body"
+        TitleChange="@((ChangeEventArgs Event) => NewNote.Title = Event?.Value?.ToString())"
+        BodyChange="@((ChangeEventArgs Event) => NewNote.Body = Event?.Value?.ToString())"
+        Create="@PostNote"
+        Update="@((MouseEventArgs Event) => {})"
+        Delete="@((MouseEventArgs Event) => {})"
+        New="true"
+    />
+    <Button
+        Class="danger-bg-color secondary-color"
+        Click="@Logout"
+    >
+        Logout
+    </Button>
+</Layout>
+
+@code {
+    private Note[]? Notes;
+
+    private Note NewNote = new Note 
+        {
+            Id = 0,
+            Title = "",
+            Body = ""
+        };
+
+    private static string token = "";
+
+    protected override async void OnInitialized()
+    {
+        base.OnInitialized();
+
+        token = await LocalStorage.GetItemAsStringAsync("Token");
+
+        if (token == "") 
+        {
+            NavigationManager.NavigateTo("/auth");
+        } 
+        else
+        {
+            await GetNotes();
+        }
+    }
+
+    private async Task GetNotes()
+    {
+        try
+        {
+            HttpClient
+                .DefaultRequestHeaders
+                .Authorization = new AuthenticationHeaderValue(
+                    "Bearer",
+                    token
+                );
+
+            Notes = await HttpClient
+                .GetFromJsonAsync<Note[]>("http://localhost:5000/API/Note");
+
+            StateHasChanged();
+        }
+        catch (HttpRequestException Exception)
+        {
+            Logger.LogError($"Get Notes Error: {Exception.Message}");
+        }
+    }
+
+    private async Task PostNote(MouseEventArgs Event)
+    {
+        try
+        {
+            HttpClient
+                .DefaultRequestHeaders
+                .Authorization = new AuthenticationHeaderValue(
+                    "Bearer",
+                    token
+                );
+
+            await HttpClient
+                .PostAsJsonAsync<Note>(
+                    "http://localhost:5000/API/Note",
+                    NewNote
+                );
+
+            await GetNotes();
+        }
+        catch (HttpRequestException Exception)
+        {
+            Logger.LogError($"Post Note Error: {Exception.Message}");
+        }
+    }
+
+    private async Task PutNote(int Id, Note Note)
+    {
+        try
+        {
+            HttpClient
+                .DefaultRequestHeaders
+                .Authorization = new AuthenticationHeaderValue(
+                    "Bearer",
+                    token
+                );
+
+            await HttpClient
+                .PutAsJsonAsync<Note>(
+                    $"http://localhost:5000/API/Note/{Id}",
+                    Note
+                );
+
+            await GetNotes();
+        }
+        catch (HttpRequestException Exception)
+        {
+            Logger.LogError($"Put Note Error: {Exception.Message}");
+        }
+    }
+
+    private async Task DeleteNote(int Id)
+    {
+        try
+        {
+            HttpClient
+                .DefaultRequestHeaders
+                .Authorization = new AuthenticationHeaderValue(
+                    "Bearer",
+                    token
+                );
+
+            await HttpClient
+                .DeleteAsync($"http://localhost:5000/API/Note/{Id}");
+
+            await GetNotes();
+        }
+        catch (HttpRequestException Exception)
+        {
+            Logger.LogError($"Delete Note Error: {Exception.Message}");
+        }
+    }
+
+    private async Task Logout()
+    {
+        try
+        {
+            HttpClient
+                .DefaultRequestHeaders
+                .Authorization = new AuthenticationHeaderValue(
+                    "Bearer", 
+                    token
+                );
+
+            await HttpClient
+                .PostAsJsonAsync<string>(
+                    "http://localhost:5000/API/User/Logout", 
+                    ""
+                );
+
+            await LocalStorage.RemoveItemAsync("Token");
+
+            NavigationManager.NavigateTo("/auth");
+        }
+        catch(HttpRequestException Exception)
+        {
+            Logger.LogError($"Logout Error: {Exception.Message}");
+        }       
+    }
+}

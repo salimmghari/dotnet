@@ -1,0 +1,141 @@
+﻿@page "/auth"
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+@inject ILogger<Auth> Logger
+
+<Layout Class="vh-100 overflow-y">
+    @if(IsLogin)
+    {
+        <Form>
+            <Title>
+                Login
+            </Title>
+            <Field 
+                Label="Username:"   
+                Type="text"
+                Placeholder="Your username"
+                Change="@((ChangeEventArgs Event) => User.Username = Event?.Value?.ToString())" 
+            />
+            <Field 
+                Label="Password:"
+                Type="password"
+                Placeholder="Your password"
+                Change="@((ChangeEventArgs Event) => User.Password = Event?.Value?.ToString())"
+            />
+            <LinkComponent Click="@((MouseEventArgs Event) => IsLogin = false)">
+                Signup?
+            </LinkComponent>
+            <Button Click="@Login">
+                Login
+            </Button>
+        </Form>
+    } 
+    else
+    {
+        <Form>
+            <Title>
+                Signup
+            </Title>
+            <Field 
+                Label="Username:"
+                Type="text"
+                Placeholder="Your username"
+                Change="@((ChangeEventArgs Event) => User.Username = Event?.Value?.ToString())"
+            />
+            <Field 
+                Label="Password:"
+                Type="password"
+                Placeholder="Your password"
+                Change="@((ChangeEventArgs Event) => User.Password = Event?.Value?.ToString())" 
+            />
+            <Field 
+                Label="Confirm Password:"
+                Type="password"
+                Placeholder="Confirm your password"
+                Change="@((ChangeEventArgs Event) => ConfirmPassword = Event?.Value?.ToString())" />
+            <LinkComponent Click="@((MouseEventArgs Event) => IsLogin = true)">
+                Login?
+            </LinkComponent>
+            <Button Click="@Signup">
+                Signup
+            </Button>
+        </Form>
+    }
+</Layout>
+
+@code {
+    private bool IsLogin = true;
+
+    private User User = new User 
+        {
+            Id = 0,
+            Username = "",
+            Password = ""
+        };
+
+    private string? ConfirmPassword;
+
+    private async Task Login(MouseEventArgs Event) 
+    {
+        if (
+            User.Username != ""
+            && User.Password != ""
+        )
+        {
+            try
+            {
+                var response = await HttpClient
+                    .PostAsJsonAsync<User>(
+                        "http://localhost:5000/API/User/Login",
+                        User
+                    );
+
+                Token token = await response
+                    .Content
+                    .ReadFromJsonAsync<Token>();
+
+
+                await LocalStorage.SetItemAsStringAsync("Token", token.token);
+
+                NavigationManager.NavigateTo("/");
+            }
+            catch (HttpRequestException Exception)
+            {
+                Logger.LogError($"Login Error: {Exception.Message}");
+            }
+        }
+    } 
+
+    private async Task Signup(MouseEventArgs Event)
+    {
+        if (
+            User.Username != ""
+            && User.Password != ""
+            && User.Password == ConfirmPassword
+        )
+        {
+            try
+            {
+                var response = await HttpClient
+                    .PostAsJsonAsync<User>(
+                        "http://localhost:5000/API/User/Signup",
+                        User
+                    );
+
+                Token token = await response
+                    .Content
+                    .ReadFromJsonAsync<Token>();
+
+                await LocalStorage.SetItemAsStringAsync("Token", token.token);
+
+                NavigationManager.NavigateTo("/");
+            }
+            catch (HttpRequestException Exception)
+            {
+                Logger.LogError($"Signup Error: {Exception.Message}");
+            }
+        }
+    }
+}

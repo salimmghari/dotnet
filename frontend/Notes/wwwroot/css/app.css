@@ -1,0 +1,157 @@
+:root {
+    --primary-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    --primary-color: #363636;
+    --secondary-color: #FFFFFF;
+    --info-color: #3A73EF;
+    --success-color: #84CC16;
+    --warning-color: #FAD12C;
+    --danger-color: #DC2626;
+    --primary-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    --primary-radius: 6px;
+}
+
+* {
+    margin: 0;
+    font-family: var(--primary-font);
+}
+
+body {
+    color: var(--primary-color);
+    background-color: var(--secondary-color);
+}
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: none;
+        cursor: pointer;
+    }
+
+button {
+    border: none;
+}
+
+input {
+    border: none;
+    display: block;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin-bottom: 0;
+}
+
+ul {
+    padding-left: 0;
+}
+
+i {
+    position: relative;
+    bottom: 2px;
+}
+
+.primary-color {
+    color: var(--primary-color) !important;
+}
+
+.secondary-color {
+    color: var(--secondary-color) !important;
+}
+
+.info-color {
+    color: var(--info-color) !important;
+}
+
+.success-color {
+    color: var(--success-color) !important;
+}
+
+.warning-color {
+    color: var(--warning-color) !important;
+}
+
+.danger-color {
+    color: var(--danger-color) !important;
+}
+
+.primary-bg-color {
+    background-color: var(--primary-color) !important;
+}
+
+.secondary-bg-color {
+    background-color: var(--secondary-color) !important;
+}
+
+.info-bg-color {
+    background-color: var(--info-color) !important;
+}
+
+.success-bg-color {
+    background-color: var(--success-color) !important;
+}
+
+.warning-bg-color {
+    background-color: var(--warning-color) !important;
+}
+
+.danger-bg-color {
+    background-color: var(--danger-color) !important;
+}
+
+.primary-border {
+    border: 1px solid var(--primary-color) !important;
+}
+
+.secondary-border {
+    border: 1px solid var(--secondary-color) !important;
+}
+
+.info-border {
+    border: 1px solid var(--info-color) !important;
+}
+
+.success-border {
+    border: 1px solid var(--success-color) !important;
+}
+
+.warning-border {
+    border: 1px solid var(--warning-color) !important;
+}
+
+.danger-border {
+    border: 1px solid var(--danger-color) !important;
+}
+
+.primary-shadow {
+    box-shadow: var(--primary-shadow) !important;
+}
+
+.primary-radius {
+    border-radius: var(--primary-radius) !important;
+}
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.overflow-x {
+    overflow-x: auto !important;
+}
+
+.overflow-y {
+    overflow-y: auto !important;
+}
+
+.overflow {
+    overflow: auto !important;
+}

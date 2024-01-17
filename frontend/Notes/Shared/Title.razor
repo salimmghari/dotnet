@@ -1,0 +1,12 @@
+﻿<h2 class="mb-5 text-center">
+    @ChildContent
+</h2>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent 
+    {
+        get; 
+        set; 
+    }
+}

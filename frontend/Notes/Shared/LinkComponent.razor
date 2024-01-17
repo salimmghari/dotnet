@@ -1,0 +1,22 @@
+﻿<p 
+   class="mb-4 info-color small pointer text-center"
+   @onclick="Click"
+>
+    @ChildContent
+</p>
+
+@code {
+    [Parameter]
+    public EventCallback<MouseEventArgs> Click 
+    {
+        get; 
+        set; 
+    }
+
+    [Parameter]
+    public RenderFragment? ChildContent
+    {
+        get;
+        set;
+    }
+}

@@ -1,0 +1,97 @@
+﻿<Form>
+    <Field 
+        Label="Title:"
+        Placeholder="Your title"
+        Value="@Title"
+        Change="@TitleChange"
+    />
+    <Field 
+        Label="Body:"   
+        Placeholder="Your body"
+        Value="@Body"
+        Change="@BodyChange"
+        MultiLines="true"
+    />
+    @if(New)
+    {
+        <Button 
+            Class="success-bg-color secondary-color"
+            Click="@Create"
+        >
+            Create
+        </Button>
+
+    } else
+    {
+        <Button 
+            Class="warning-bg-color secondary-color mb-4"
+            Click="@Update"
+        >
+            Update
+        </Button>
+        <Button 
+            Class="danger-bg-color secondary-color"
+            Click="@Delete"
+        >
+            Delete
+        </Button>
+    }
+</Form>
+
+@code {
+    [Parameter]
+    public bool New
+    {
+        get;
+        set;
+    } = false;
+
+    [Parameter]
+    public string? Title
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public string? Body
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> TitleChange
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> BodyChange
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> Create
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> Update
+    {
+        get;
+        set;
+    }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> Delete
+    {
+        get;
+        set;
+    }
+}

@@ -1,0 +1,69 @@
+﻿<div class="d-flex flex-column justify-content-start align-items-center">
+    <label class="w-100 mb-2 primary-color">
+        @Label
+    </label>
+    @if (MultiLines == true)
+    {
+        <textarea 
+            class="w-100 mb-4 px-3 py-2 primary-color secondary-bg-color primary-shadow primary-radius primary-border"
+            style="height: 200px"
+            placeholder="@Placeholder"
+            value="@Value"
+            @oninput="Change"
+        ></textarea>
+    }
+    else
+    {
+        <input 
+            class="w-100 mb-4 px-3 py-2 primary-color secondary-bg-color primary-shadow primary-radius primary-border"
+            type="@Type"
+            placeholder="@Placeholder"
+            value="@Value"
+            @oninput="Change" 
+        />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string? Label 
+    {
+        get; 
+        set; 
+    }
+
+    [Parameter]
+    public string Type 
+    { 
+        get; 
+        set; 
+    } = "text";
+
+    [Parameter]
+    public string? Placeholder 
+    {
+        get; 
+        set; 
+    }
+
+    [Parameter]
+    public string? Value 
+    { 
+        get; 
+        set; 
+    }
+
+    [Parameter]
+    public bool MultiLines
+    {
+        get;
+        set;
+    } = false;
+
+    [Parameter]
+    public EventCallback<ChangeEventArgs> Change 
+    {
+        get; 
+        set; 
+    }
+}

@@ -1,0 +1,12 @@
+﻿<form class="w-100 p-5 secondary-bg-color primary-radius primary-border primary-shadow mb-5">
+    @ChildContent
+</form>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent 
+    {
+        get; 
+        set; 
+    }
+}

@@ -1,0 +1,19 @@
+﻿<div class="w-100 d-flex flex-column justify-content-center align-items-center p-5 secondary-bg-color @Class">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public string? Class 
+    { 
+        get; 
+        set; 
+    }
+
+    [Parameter]
+    public RenderFragment? ChildContent 
+    { 
+        get; 
+        set; 
+    }
+}
